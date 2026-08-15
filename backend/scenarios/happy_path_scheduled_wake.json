@@ -1,0 +1,56 @@
+{
+  "supervisor": {
+    "name": "Happy Path Scheduled Wake Scenario",
+    "base_instruction": "Supervise the normal order lifecycle. Avoid unnecessary intervention. Close after delivery.",
+    "tools_enabled": [
+      "send_customer_message",
+      "create_internal_note",
+      "escalate_issue",
+      "mark_order_for_review",
+      "schedule_next_wake_up",
+      "close_workflow"
+    ],
+    "wake_aggressiveness": "medium",
+    "model_config": {
+      "model": "gemini-3.6-flash",
+      "temperature": 0.2
+    }
+  },
+  "order_id": "ORDER-SCENARIO-HAPPY-1",
+  "default_wake_seconds": 8,
+  "steps": [
+    {
+      "event": {
+        "type": "order_created",
+        "payload": {}
+      },
+      "wait_after": 2
+    },
+    {
+      "event": {
+        "type": "payment_confirmed",
+        "payload": {}
+      },
+      "wait_after": 2
+    },
+    {
+      "wait": 12
+    },
+    {
+      "event": {
+        "type": "shipment_created",
+        "payload": {
+          "carrier": "DemoExpress"
+        }
+      },
+      "wait_after": 4
+    },
+    {
+      "event": {
+        "type": "delivered",
+        "payload": {}
+      },
+      "wait_after": 3
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "supervisor": {
+    "name": "Payment Failure Review Scenario",
+    "base_instruction": "Supervise payment failures carefully. Do not contact the customer unless human review has approved it.",
+    "tools_enabled": [
+      "create_internal_note",
+      "escalate_issue",
+      "mark_order_for_review",
+      "schedule_next_wake_up",
+      "close_workflow"
+    ],
+    "wake_aggressiveness": "high",
+    "model_config": {
+      "model": "gemini-3.6-flash",
+      "temperature": 0.2
+    }
+  },
+  "order_id": "ORDER-SCENARIO-PAYMENT-1",
+  "default_wake_seconds": 30,
+  "steps": [
+    {
+      "instruction": "Do not contact the customer without human review.",
+      "wait_after": 2
+    },
+    {
+      "event": {
+        "type": "payment_failed",
+        "payload": {
+          "reason": "card_declined"
+        }
+      },
+      "wait_after": 8
+    },
+    {
+      "event": {
+        "type": "payment_confirmed",
+        "payload": {
+          "source": "manual_retry"
+        }
+      },
+      "wait_after": 5
+    },
+    {
+      "event": {
+        "type": "delivered",
+        "payload": {}
+      },
+      "wait_after": 3
+    }
+  ]
+}

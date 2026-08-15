@@ -1,0 +1,60 @@
+{
+  "supervisor": {
+    "name": "Delayed Shipment Scenario Supervisor",
+    "base_instruction": "Supervise the order. Follow run-specific instructions exactly. Escalate shipment delays and close only after delivery.",
+    "tools_enabled": [
+      "send_customer_message",
+      "create_internal_note",
+      "escalate_issue",
+      "mark_order_for_review",
+      "schedule_next_wake_up",
+      "close_workflow"
+    ],
+    "wake_aggressiveness": "high",
+    "model_config": {
+      "model": "gemini-3.6-flash",
+      "temperature": 0.2
+    }
+  },
+  "order_id": "ORDER-BUILDER-1001",
+  "default_wake_seconds": 30,
+  "steps": [
+    {
+      "event": {
+        "type": "shipment_delayed",
+        "payload": {}
+      },
+      "then": [],
+      "wait_after": 2.0
+    },
+    {
+      "instruction": "If shipment is delayed, escalate immediately.",
+      "then": [],
+      "wait_after": 1.0
+    },
+    {
+      "wait": 10.0,
+      "then": []
+    },
+    {
+      "event": {
+        "type": "shipment_delayed",
+        "payload": {}
+      },
+      "then": [],
+      "wait_after": 2.0
+    },
+    {
+      "wait": 10.0,
+      "then": []
+    },
+    {
+      "event": {
+        "type": "shipment_delayed",
+        "payload": {}
+      },
+      "then": [],
+      "wait_after": 2.0
+    }
+  ]
+}
